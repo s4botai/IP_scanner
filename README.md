@@ -5,6 +5,10 @@
 ```sh
 sudo apt install prips
 ```
+```sh
+sudo apt install nmap
+```
+
 ## Usage
 
 ```sh
