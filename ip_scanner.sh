@@ -33,16 +33,22 @@ EOF
 function check_dependencies(){
   echo -e "\n[${Orange}${NC}] Checking for dependencies..."
   /usr/bin/sleep 2  
-  pkgs='prips'
+  pkgs='prips nmap'
+  all_installed=true
   for pkg in $pkgs; do
     status="$(dpkg-query -W --showformat='${db:Status-Status}' "$pkg" 2>&1)"
     if [[ ! $? -eq 0 || ! "$status" = "installed" ]]; then
       echo -e "\n[${Red}${NC}] Package $pkg not installed, please install it with 'sudo apt install $pkg' and run the tool again."
-      exit 1
-    else
-      echo -e "\n[${Green}${NC}] All dependencies installed"
+      all_installed=false
     fi
   done
+  
+  if $all_installed; then
+    echo -e "\n[${Green}${NC}] All dependencies installed"
+  else
+    exit 1
+  fi
+
 
 }
 
