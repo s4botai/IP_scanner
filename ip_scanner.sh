@@ -33,7 +33,7 @@ EOF
 function check_dependencies(){
   echo -e "\n[${Orange}${NC}] Checking for dependencies..."
   /usr/bin/sleep 2  
-  pkgs='prips nmap'
+  pkgs='prips nmap naabu'
   all_installed=true
   for pkg in $pkgs; do
     status="$(dpkg-query -W --showformat='${db:Status-Status}' "$pkg" 2>&1)"
@@ -77,16 +77,13 @@ function main(){
   
     /usr/bin/sleep 1
 
-    echo -e "\n[${Orange}${NC}] Scanning top ports 1000 on every alive IP..."
-    nmap -iL output/alive_ips.txt -n -Pn --open --top-ports 1000 -oA output/nmap_open_ports > /dev/null
-    /usr/bin/sleep 2
+    echo -e "\n[${Orange}${NC}] Scanning all 65535 ports on every alive IP..."
+    /usr/bin/naabu -list output/alive_ips.txt -p - -silent > output/naabu_open_ports.txt
 
     echo -e "\n[${Orange}${NC}] Scanning complete. Check the output folder"
     echo -e "\n[${Orange}${NC}] Files generated:\n"
     echo -e "  alive_ips.txt          (alive IPs)"
-    echo -e "  nmap_open_ports.nmap   (legible)"
-    echo -e "  nmap_open_ports.gnmap  (grepable)"
-    echo -e "  nmap_open_ports.xml    (XML for processing)"
+    echo -e "  naabu_open_ports.txt   (Open Ports on the alive IPs)"
   else
     echo -e "\n[${Red}${NC}]Error: Failed to create 'output' directory, check if the directory already exists or you may not have enough permissions. Exiting..."
     exit 1
