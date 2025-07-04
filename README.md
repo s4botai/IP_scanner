@@ -1,13 +1,11 @@
-`IP scanner` is a script that will help you with the process of IP scanning. Feed it with a file containing all IP ranges you discovered. It will use prips to get all the IPs from the ranges, filter for the alive ones and scan the top 1000 ports of the alive IPs.
+`IP scanner` is a script that will help you with the process of IP scanning. Feed it with a file containing all IP ranges you discovered. It will use prips to get all the IPs from the ranges, filter for the alive ones with nmap and scan all the 65535 ports on every alive IP using naabu.
 
 ## Requierements
 
 ```sh
-sudo apt install prips
+sudo apt install prips nmap naabu
 ```
-```sh
-sudo apt install nmap
-```
+
 
 ## Usage
 
@@ -25,7 +23,8 @@ cat ips.txt
 ```sh
 bash ip_scanner.sh -f ips.txt
 ```
-![imagen](https://github.com/user-attachments/assets/a46c6c95-c03b-46ea-9709-4e6f9297a612)
+![imagen](https://github.com/user-attachments/assets/0c8b0428-0b56-47b3-931c-aaaf4f492e73)
+
 
 Check the files in the output folder to see the results
 
