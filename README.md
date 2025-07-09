@@ -23,7 +23,6 @@ cat ips.txt
 ```sh
 bash ip_scanner.sh -f ips.txt
 ```
-![imagen](https://github.com/user-attachments/assets/0c8b0428-0b56-47b3-931c-aaaf4f492e73)
 
 
 Check the files in the output folder to see the results
