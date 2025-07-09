@@ -33,7 +33,7 @@ EOF
 function check_dependencies(){
   echo -e "\n[${Orange}${NC}] Checking for dependencies..."
   /usr/bin/sleep 2  
-  pkgs='prips nmap naabu'
+  pkgs='prips nmap'
   all_installed=true
   for pkg in $pkgs; do
     status="$(dpkg-query -W --showformat='${db:Status-Status}' "$pkg" 2>&1)"
@@ -62,7 +62,7 @@ function main(){
     done < "$file" > output/all_ips.txt
     /usr/bin/sleep 2
 
-    echo -e "\n[${Orange}${NC}] Filtering for alive IPs, this can take a while..."
+    echo -e "\n[${Orange}${NC}] Filtering for alive IPs..."
     /usr/bin/nmap -iL output/all_ips.txt -sn -oG alive_scan.gnmap > /dev/null
     grep "Status: Up" alive_scan.gnmap | awk '{print $2}' > output/alive_ips.txt
     rm alive_scan.gnmap
@@ -77,13 +77,17 @@ function main(){
   
     /usr/bin/sleep 1
 
-    echo -e "\n[${Orange}${NC}] Scanning all 65535 ports on every alive IP..."
-    /usr/bin/naabu -list output/alive_ips.txt -p - -silent > output/naabu_open_ports.txt
+    echo -e "\n[${Orange}${NC}] Scanning all 65535 ports on every alive IP, this can take a while..."
+    nmap -iL output/alive_ips.txt -n -Pn --open -p- -oA output/nmap_open_ports > /dev/null
+
+    /usr/bin/sleep 2
 
     echo -e "\n[${Orange}${NC}] Scanning complete. Check the output folder"
     echo -e "\n[${Orange}${NC}] Files generated:\n"
     echo -e "  alive_ips.txt          (alive IPs)"
-    echo -e "  naabu_open_ports.txt   (Open Ports on the alive IPs)"
+    echo -e "  nmap_open_ports.nmap   (legible)"
+    echo -e "  nmap_open_ports.gnmap  (grepable)"
+    echo -e "  nmap_open_ports.xml    (XML for processing)"
   else
     echo -e "\n[${Red}${NC}]Error: Failed to create 'output' directory, check if the directory already exists or you may not have enough permissions. Exiting..."
     exit 1
